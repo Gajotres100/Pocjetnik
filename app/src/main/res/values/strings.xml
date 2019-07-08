@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Pocjetnik</string>
+    <string name="action_categories">Kategorije</string>
+
+    <string-array name="categories_array">
+        <item>Home</item>
+        <item>Work</item>
+        <item>Family</item>
+        <item>Sports</item>
+        <item>Hobbies</item>
+    </string-array>
+</resources>
