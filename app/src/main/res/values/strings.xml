@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Pocjetnik</string>
+    <string name="app_name"></string>
     <string name="action_categories">Kategorije</string>
 
     <string-array name="categories_array">

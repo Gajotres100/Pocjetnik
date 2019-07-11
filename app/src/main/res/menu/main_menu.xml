@@ -7,7 +7,6 @@
     <item
         android:id="@+id/action_favorite"
         android:orderInCategory="300"
-        android:title="User"
+        android:title="@string/action_categories"
         app:showAsAction="ifRoom"></item>
-
 </menu>
