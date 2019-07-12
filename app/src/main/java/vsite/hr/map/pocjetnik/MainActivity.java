@@ -6,9 +6,21 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+
+    String[] itemname ={
+            "Get theatre tickets",
+            "Order pizza for tonight",
+            "Buy groceries",
+            "Running session at 19.30",
+            "Call Uncle Sam"
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +29,20 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+
+        final ListView lv=(ListView) findViewById(R.id.lvTodos);
+        lv.setAdapter(new ArrayAdapter<String>(this, R.layout.kategorija_list_item,
+                R.id.tvNote,itemname));
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
+                Intent intent = new Intent(MainActivity.this, PocjetnikActivity.class);
+                String content= (String) lv.getItemAtPosition(pos);
+                intent.putExtra("Content", content);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
