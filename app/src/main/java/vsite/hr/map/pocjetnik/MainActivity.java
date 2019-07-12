@@ -31,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_favorite) {
-            Toast.makeText(MainActivity.this, "Action clicked", Toast.LENGTH_LONG).show();
-            return true;
+            Intent intent = new Intent(MainActivity.this, KategorijeActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
