@@ -1,15 +1,17 @@
-package vsite.hr.map.pocjetnik;
+package vsite.hr.map.pocjetnik.Data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import vsite.hr.map.pocjetnik.PocjetnikContract.KategorijaEntry;
-import vsite.hr.map.pocjetnik.PocjetnikContract.PocjetnikEntry;
+
+import vsite.hr.map.pocjetnik.Data.PocjetnikContract;
+import vsite.hr.map.pocjetnik.Data.PocjetnikContract.KategorijaEntry;
+import vsite.hr.map.pocjetnik.Data.PocjetnikContract.PocjetnikEntry;
 
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "todosapp.db";
+    private static final String DATABASE_NAME = "pocjetnikapp.db";
     private static final int DATABASE_VERSION = 1;
     private static final String TABLE_CATEGORIES_CREATE=
             "CREATE TABLE " + KategorijaEntry.TABLE_NAME + " (" +
