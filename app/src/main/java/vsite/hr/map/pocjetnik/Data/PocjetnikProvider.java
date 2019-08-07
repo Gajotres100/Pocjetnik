@@ -4,6 +4,7 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 
 public class PocjetnikProvider extends ContentProvider {
     @Override
@@ -11,31 +12,31 @@ public class PocjetnikProvider extends ContentProvider {
         return false;
     }
 
-    @androidx.annotation.Nullable
+    @Nullable
     @Override
-    public Cursor query(@androidx.annotation.NonNull Uri uri, @androidx.annotation.Nullable String[] projection, @androidx.annotation.Nullable String selection, @androidx.annotation.Nullable String[] selectionArgs, @androidx.annotation.Nullable String sortOrder) {
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String orderBy) {
         return null;
     }
 
-    @androidx.annotation.Nullable
+    @Nullable
     @Override
-    public String getType(@androidx.annotation.NonNull Uri uri) {
+    public String getType(Uri uri) {
         return null;
     }
 
-    @androidx.annotation.Nullable
+    @Nullable
     @Override
-    public Uri insert(@androidx.annotation.NonNull Uri uri, @androidx.annotation.Nullable ContentValues values) {
+    public Uri insert(Uri uri, ContentValues values) {
         return null;
     }
 
     @Override
-    public int delete(@androidx.annotation.NonNull Uri uri, @androidx.annotation.Nullable String selection, @androidx.annotation.Nullable String[] selectionArgs) {
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
         return 0;
     }
 
     @Override
-    public int update(@androidx.annotation.NonNull Uri uri, @androidx.annotation.Nullable ContentValues values, @androidx.annotation.Nullable String selection, @androidx.annotation.Nullable String[] selectionArgs) {
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         return 0;
     }
 }
