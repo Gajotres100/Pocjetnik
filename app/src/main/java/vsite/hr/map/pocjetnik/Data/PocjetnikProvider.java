@@ -109,7 +109,6 @@ public class PocjetnikProvider extends ContentProvider {
     }
 
     private Uri insertRecord(Uri uri, ContentValues values, String table) {
-        //this time we need a writable database
         SQLiteDatabase db = helper.getWritableDatabase();
         long id = db.insert(table, null, values);
         if (id == -1) {
@@ -140,7 +139,6 @@ public class PocjetnikProvider extends ContentProvider {
     }
 
     private int deleteRecord(Uri uri, String selection, String[] selectionArgs, String tableName) {
-        //this time we need a writable database
         SQLiteDatabase db = helper.getWritableDatabase();
         int id = db.delete(tableName, selection, selectionArgs);
         if (id == -1) {
@@ -166,7 +164,6 @@ public class PocjetnikProvider extends ContentProvider {
     }
 
     private int updateRecord(Uri uri, ContentValues values, String selection, String[] selectionArgs, String tableName) {
-        //this time we need a writable database
         SQLiteDatabase db = helper.getWritableDatabase();
         int id = db.update(tableName, values, selection, selectionArgs);
         if (id == 0) {
