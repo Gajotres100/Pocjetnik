@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import static vsite.hr.map.pocjetnik.Data.PocjetnikContract.CONTENT_AUTHORITY;
 import static vsite.hr.map.pocjetnik.Data.PocjetnikContract.PATH_CATEGORIES;
@@ -96,16 +97,82 @@ public class PocjetnikProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        return null;
+        int match = uriMatcher.match(uri);
+        switch (match) {
+            case TODOS:
+                return insertRecord(uri, values, PocjetnikEntry.TABLE_NAME);
+            case CATEGORIES:
+                return insertRecord(uri, values, KategorijaEntry.TABLE_NAME);
+            default:
+                throw new IllegalArgumentException("Insert unknown URI: " + uri);
+        }
+    }
+
+    private Uri insertRecord(Uri uri, ContentValues values, String table) {
+        //this time we need a writable database
+        SQLiteDatabase db = helper.getWritableDatabase();
+        long id = db.insert(table, null, values);
+        if (id == -1) {
+            Log.e("Error", "insert error for URI " + uri);
+            return null;
+        }
+        getContext().getContentResolver().notifyChange(uri, null);
+        return ContentUris.withAppendedId(uri, id);
     }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        int match = uriMatcher.match(uri);
+        switch (match) {
+            case TODOS:
+                return deleteRecord(uri, null, null, PocjetnikEntry.TABLE_NAME);
+            case TODOS_ID:
+                return deleteRecord(uri, selection, selectionArgs, PocjetnikEntry.TABLE_NAME);
+            case CATEGORIES:
+                return deleteRecord(uri, null, null, KategorijaEntry.TABLE_NAME);
+            case CATEGORIES_ID:
+                return deleteRecord(uri, selection, selectionArgs,
+                        KategorijaEntry.TABLE_NAME);
+
+            default:
+                throw new IllegalArgumentException("Insert unknown URI: " + uri);
+        }
+    }
+
+    private int deleteRecord(Uri uri, String selection, String[] selectionArgs, String tableName) {
+        //this time we need a writable database
+        SQLiteDatabase db = helper.getWritableDatabase();
+        int id = db.delete(tableName, selection, selectionArgs);
+        if (id == -1) {
+            Log.e("Error", "delete unknown URI " + uri);
+            return -1;
+        }
+        getContext().getContentResolver().notifyChange(uri, null);
+        return id;
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        return 0;
+        int match = uriMatcher.match(uri);
+        switch (match) {
+            case TODOS:
+                return updateRecord(uri, values, selection, selectionArgs, PocjetnikEntry.TABLE_NAME);
+
+            case CATEGORIES:
+                return updateRecord(uri, values, selection, selectionArgs, KategorijaEntry.TABLE_NAME);
+            default:
+                throw new IllegalArgumentException("Update unknown URI: " + uri);
+        }
+    }
+
+    private int updateRecord(Uri uri, ContentValues values, String selection, String[] selectionArgs, String tableName) {
+        //this time we need a writable database
+        SQLiteDatabase db = helper.getWritableDatabase();
+        int id = db.update(tableName, values, selection, selectionArgs);
+        if (id == 0) {
+            Log.e("Error", "update error for URI " + uri);
+            return -1;
+        }
+        return id;
     }
 }
