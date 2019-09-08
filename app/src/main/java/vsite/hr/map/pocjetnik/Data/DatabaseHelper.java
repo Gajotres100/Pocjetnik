@@ -38,6 +38,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(TABLE_CATEGORIES_CREATE);
         db.execSQL(TABLE_TODOS_CREATE);
+        //drugi laptop
     }
 
     @Override
