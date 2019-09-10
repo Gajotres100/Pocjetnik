@@ -1,19 +1,16 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
-        <variable
-            name="pocjetnik"
-            type="vsite.hr.map.pocjetnik.model.Pocjetnik"  />
-        >
+        <variable name="pocjetnik" type="vsite.hr.map.pocjetnik.model.Pocjetnik"  />
     </data>
 
     <RelativeLayout
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="16dp"
-        android:paddingLeft="6dp"
-        android:paddingRight="6dp"
-        android:paddingTop="16dp"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
         tools:context="vsite.hr.map.pocjetnik.PocjetnikActivity">
 
         <Spinner
@@ -39,8 +36,8 @@
             android:layout_above="@+id/editExpiryDate"
             android:layout_alignParentTop="false"
             android:gravity="top"
-            android:text="@={todo.text}"
-            android:tag="@{todo.id}"/>
+            android:text="@={pocjetnik.text}"
+            android:tag="@{pocjetnik.id}"/>
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -50,10 +47,10 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:text="@={todo.expired}" />
+            android:text="@={pocjetnik.expired}" />
         <CheckBox
             android:text="Done"
-            android:checked="@={todo.done}"
+            android:checked="@={pocjetnik.done}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

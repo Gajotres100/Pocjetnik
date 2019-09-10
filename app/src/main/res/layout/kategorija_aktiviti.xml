@@ -2,8 +2,8 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:bind="http://schemas.android.com/apk/res-auto">
     <data>
-        <variable name="categories" type="com.example.todos.model.CategoryList"/>
-        <variable name="category" type="com.example.todos.model.Category"/>
+        <variable name="categories" type="vsite.hr.map.pocjetnik.model.KategorijaLista"/>
+        <variable name="category" type="vsite.hr.map.pocjetnik.model.Kategorija"/>
     </data>
 
     <LinearLayout

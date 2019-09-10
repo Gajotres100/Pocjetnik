@@ -56,9 +56,9 @@ public class MainActivity extends AppCompatActivity
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
-                //move the cursor to the selected row
+
                 cursor = (Cursor) adapterView.getItemAtPosition(pos);
-                //get the object data from the cursor
+
                 int todoId = cursor.getInt(
                         cursor.getColumnIndex(PocjetnikEntry._ID));
                 String todoText = cursor.getString(
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity
                 String todoCreated = cursor.getString(
                         cursor.getColumnIndex(PocjetnikEntry.COLUMN_CREATED));
                 String todoCategory = cursor.getString(cursor.getColumnIndex(PocjetnikEntry.COLUMN_CATEGORY));
-                //create the object that will be passed to the todoActivity
+
                 boolean boolDone = (todoDone == 1) ? true : false;
                 Pocjetnik pocjetnik = new Pocjetnik (todoId,todoText, todoCreated, todoExpireDate, boolDone,
                         todoCategory);
@@ -85,8 +85,29 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Pocjetnik pocjetnik = new Pocjetnik (0,"", "", "", false, "0");
+                Intent intent = new Intent(MainActivity.this, PocjetnikActivity.class);
+
+                intent.putExtra("pocjetnik", pocjetnik);
+                intent.putExtra("categories", list);
+                startActivity(intent);
+
+            }
+        });
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
+                                       int position, long id) {
+
+                if (position >= 0) {
+                    getLoaderManager().restartLoader(URL_LOADER, null,
+                            MainActivity.this);
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
     }

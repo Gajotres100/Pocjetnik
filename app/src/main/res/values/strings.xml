@@ -1,6 +1,18 @@
 <resources>
-    <string name="app_name"></string>
+    <string name="app_name">Pocjetnik</string>
     <string name="action_categories">Kategorije</string>
+    <string name="action_delete_all_todos">Obriši</string>
+    <string name="action_create_test_data">Ubaci</string>
+    <string name="Done">Gotovo</string>
+    <string name="insert_new_category">Unesi novu kategoriju</string>
+    <string name="newCategory">Nova</string>
+    <string name="save_category">Spremi</string>
+    <string name="delete_category">Obriši</string>
+    <string name="delete_categories_dialog_title">Obrisati odabranu kategoriju?</string>
+    <string name="delete_categories_dialog">Potvrdi</string>
+    <string name="action_delete_todo">Obriši</string>
+    <string name="delete_todo_dialog_title">Potvrdi</string>
+    <string name="delete_todo_dialog">Obriši pocjetnik?</string>
 
     <string-array name="categories_array">
         <item>Home</item>
