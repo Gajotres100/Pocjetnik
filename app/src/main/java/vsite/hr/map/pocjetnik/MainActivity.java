@@ -26,6 +26,7 @@ import vsite.hr.map.pocjetnik.Data.PocjetnikContract.PocjetnikEntry;
 
 import vsite.hr.map.pocjetnik.Data.PocjetnikContract;
 import vsite.hr.map.pocjetnik.Data.PocjetnikQueryHandler;
+import vsite.hr.map.pocjetnik.model.Kategorija;
 import vsite.hr.map.pocjetnik.model.KategorijaLista;
 import vsite.hr.map.pocjetnik.model.Pocjetnik;
 
@@ -43,15 +44,14 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         spinner=(Spinner) findViewById(R.id.spinCategories);
         getLoaderManager().initLoader(URL_LOADER, null, this);
-
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
-
+        setCategories();
         final ListView lv = (ListView) findViewById(R.id.lvTodos);
         adapter = new PocjetnikCursorAdapter(this, cursor, false);
+        lv.setAdapter(adapter);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity
                         todoCategory);
                 Intent intent = new Intent(MainActivity.this, PocjetnikActivity.class);
                 intent.putExtra("pocjetnik", pocjetnik);
-                intent.putExtra("kategorije", list);
+                intent.putExtra("categories", list);
                 startActivity(intent);
             }
         });
@@ -99,7 +99,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
                                        int position, long id) {
-
                 if (position >= 0) {
                     getLoaderManager().restartLoader(URL_LOADER, null,
                             MainActivity.this);
@@ -110,6 +109,33 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+
+
+    }
+
+    private void setCategories() {
+        final PocjetnikQueryHandler categoriesHandler = new PocjetnikQueryHandler(
+                this.getContentResolver()) {
+            @Override
+            protected void onQueryComplete(int token, Object cookie,
+                                           Cursor cursor) {
+                if ((cursor != null)) {
+                    int i = 0;
+                    list.ItemList.add(i, new Kategorija(ALL_CATEGORIES, "All Categories"));
+                    i++;
+                    while (cursor.moveToNext()) {
+                        list.ItemList.add(i, new Kategorija(
+                                cursor.getInt(0),
+                                cursor.getString(1)
+                        ));
+                        i++;
+                    }
+                }
+            }
+        };
+        categoriesHandler.startQuery(1, null, PocjetnikContract.KategorijaEntry.CONTENT_URI,
+                null, null, null,
+                PocjetnikContract.KategorijaEntry.COLUMN_DESCRIPTION);
     }
 
     @Override
@@ -124,7 +150,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        if (id == R.id.action_favorite) {
+        if (id == R.id.action_categories) {
             Intent intent = new Intent(MainActivity.this, KategorijeActivity.class);
             startActivity(intent);
 
