@@ -107,8 +107,6 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-
-
     }
 
     private void setCategories() {
@@ -146,17 +144,13 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-
-
         if (id == R.id.action_categories) {
             Intent intent = new Intent(MainActivity.this, KategorijeActivity.class);
             startActivity(intent);
-
         }
         if (id == R.id.action_delete_all_todos) {
             deleteTodo(ALL_RECORDS);
         }
-
         if (id == R.id.action_create_test_data) {
             createTestTodos();
         }
