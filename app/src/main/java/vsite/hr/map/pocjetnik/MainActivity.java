@@ -87,11 +87,9 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 Pocjetnik pocjetnik = new Pocjetnik (0,"", "", "", false, "0");
                 Intent intent = new Intent(MainActivity.this, PocjetnikActivity.class);
-
                 intent.putExtra("pocjetnik", pocjetnik);
                 intent.putExtra("categories", list);
                 startActivity(intent);
-
             }
         });
 
