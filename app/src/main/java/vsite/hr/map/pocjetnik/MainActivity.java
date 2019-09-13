@@ -3,6 +3,7 @@ package vsite.hr.map.pocjetnik;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -31,14 +32,38 @@ import vsite.hr.map.pocjetnik.model.KategorijaLista;
 import vsite.hr.map.pocjetnik.model.Pocjetnik;
 
 public class MainActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<Cursor>{
-    Cursor cursor;
+        implements LoaderManager.LoaderCallbacks<Cursor> {
     static final int ALL_RECORDS = -1;
     static final int ALL_CATEGORIES = -1;
-    Spinner spinner;
     private static final int URL_LOADER = 0;
+    Cursor cursor;
     PocjetnikCursorAdapter adapter;
     KategorijaLista list = new KategorijaLista();
+    Spinner spinner;
+    KategorijeListAdapter categoryAdapter;
+
+    private void updateTodo() {
+        int id = 2;
+        String[] args = {String.valueOf(id)};
+        ContentValues values = new ContentValues();
+        values.put(PocjetnikEntry.COLUMN_TEXT, "Call Mr Clark Kent");
+        int numRows = getContentResolver().update(PocjetnikEntry.CONTENT_URI, values,
+                PocjetnikEntry._ID + "=?", args);
+
+    }
+
+    private void deleteTodo(int id) {
+
+        String[] args = {String.valueOf(id)};
+        if (id == ALL_RECORDS) {
+            args = null;
+        }
+        PocjetnikQueryHandler handler = new PocjetnikQueryHandler(
+                this.getContentResolver());
+        handler.startDelete(1, null,
+                PocjetnikEntry.CONTENT_URI, PocjetnikEntry._ID + " =?", args);
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,9 +112,11 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 Pocjetnik pocjetnik = new Pocjetnik (0,"", "", "", false, "0");
                 Intent intent = new Intent(MainActivity.this, PocjetnikActivity.class);
+
                 intent.putExtra("pocjetnik", pocjetnik);
                 intent.putExtra("categories", list);
                 startActivity(intent);
+
             }
         });
 
@@ -97,6 +124,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
                                        int position, long id) {
+
                 if (position >= 0) {
                     getLoaderManager().restartLoader(URL_LOADER, null,
                             MainActivity.this);
@@ -107,6 +135,56 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+    }
+
+    private void createTestTodos() {
+
+        for (int i = 1; i<=20; i++) {
+            ContentValues values = new ContentValues();
+            values.put(PocjetnikEntry.COLUMN_TEXT, "Todo Item #" + i);
+            values.put(PocjetnikEntry.COLUMN_CATEGORY, 1);
+            values.put(PocjetnikEntry.COLUMN_CREATED, "2019-01-02");
+            values.put(PocjetnikEntry.COLUMN_EXPIRED, "2019-08-08");
+            int done = (i%2 == 1) ? 1 : 0;
+            values.put(PocjetnikEntry.COLUMN_DONE, done);
+            PocjetnikQueryHandler handler = new PocjetnikQueryHandler(
+                    this.getContentResolver());
+            handler.startInsert(1, null, PocjetnikEntry.CONTENT_URI,
+                    values );
+        }
+    }
+
+    private void CreateCategory() {
+        ContentValues values = new ContentValues();
+        values.put(PocjetnikContract.KategorijaEntry.COLUMN_DESCRIPTION, "Work");
+        Uri uri = getContentResolver().insert(PocjetnikContract.KategorijaEntry.CONTENT_URI,
+                values);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_categories) {
+            Intent intent = new Intent(MainActivity.this, KategorijeActivity.class);
+            startActivity(intent);
+
+        }
+        if (id == R.id.action_delete_all_todos) {
+            deleteTodo(ALL_RECORDS);
+        }
+
+        if (id == R.id.action_create_test_data) {
+            createTestTodos();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void setCategories() {
@@ -134,61 +212,10 @@ public class MainActivity extends AppCompatActivity
                 PocjetnikContract.KategorijaEntry.COLUMN_DESCRIPTION);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
-    }
+
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_categories) {
-            Intent intent = new Intent(MainActivity.this, KategorijeActivity.class);
-            startActivity(intent);
-        }
-        if (id == R.id.action_delete_all_todos) {
-            deleteTodo(ALL_RECORDS);
-        }
-        if (id == R.id.action_create_test_data) {
-            createTestTodos();
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void createTestTodos() {
-
-        for (int i = 1; i<=20; i++) {
-            ContentValues values = new ContentValues();
-            values.put(PocjetnikEntry.COLUMN_TEXT, "Todo Item #" + i);
-            values.put(PocjetnikEntry.COLUMN_CATEGORY, 1);
-            values.put(PocjetnikEntry.COLUMN_CREATED, "2016-01-02");
-            values.put(PocjetnikEntry.COLUMN_EXPIRED, "2017-08-08");
-            int done = (i%2 == 1) ? 1 : 0;
-            values.put(PocjetnikEntry.COLUMN_DONE, done);
-            PocjetnikQueryHandler handler = new PocjetnikQueryHandler(
-                    this.getContentResolver());
-            handler.startInsert(1, null, PocjetnikEntry.CONTENT_URI,
-                    values );
-        }
-    }
-
-    private void deleteTodo(int id) {
-        String[] args = {String.valueOf(id)};
-        if (id == ALL_RECORDS) {
-            args = null;
-        }
-        PocjetnikQueryHandler handler = new PocjetnikQueryHandler(
-                this.getContentResolver());
-        handler.startDelete(1, null,
-                PocjetnikEntry.CONTENT_URI, PocjetnikEntry._ID + " =?", args);
-    }
-
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String[] projection = {PocjetnikEntry.COLUMN_TEXT,
                 PocjetnikEntry.TABLE_NAME + "." + PocjetnikEntry._ID,
                 PocjetnikEntry.COLUMN_CREATED,
@@ -216,13 +243,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
-        adapter.swapCursor(cursor);
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
+        adapter.swapCursor(data);
+        if (categoryAdapter == null) {
+            categoryAdapter = new KategorijeListAdapter(list.ItemList);
+            spinner.setAdapter(categoryAdapter);
+        }
     }
 
     @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-
+    public void onLoaderReset(Loader<Cursor> loader) {
+        adapter.swapCursor(null);
     }
 }

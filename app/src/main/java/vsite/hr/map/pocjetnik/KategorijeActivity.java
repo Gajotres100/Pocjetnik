@@ -67,16 +67,15 @@ public class KategorijeActivity extends AppCompatActivity
         btnDelete.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 new AlertDialog.Builder(KategorijeActivity.this)
-                        .setTitle("Obriši odabranu kategoriju?")
-                        .setMessage("Potvrdi te")
+                        .setTitle(getString(R.string.delete_categories_dialog_title))
+                        .setMessage(getString(R.string.delete_categories_dialog))
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 //delete
                                 categories.ItemList.remove(category);
                                 String [] args = new String[1];
-                                Uri uri =  Uri.withAppendedPath(PocjetnikContract
-                                        .KategorijaEntry.CONTENT_URI, String.valueOf(category.catId.get()));
+                                Uri uri =  Uri.withAppendedPath(PocjetnikContract.KategorijaEntry.CONTENT_URI, String.valueOf(category.catId.get()));
                                 handler.startDelete(1, null, uri
                                         , null, null);
                                 category = null;
@@ -133,7 +132,6 @@ public class KategorijeActivity extends AppCompatActivity
         list = new ObservableArrayList<>();
         int i=0;
 
-
         data.moveToPosition(-1);
         while (data.moveToNext())
         {
@@ -145,7 +143,6 @@ public class KategorijeActivity extends AppCompatActivity
         }
         adapter = new KategorijeListAdapter(list);
         lv.setAdapter(adapter);
-
 
         category = new Kategorija();
         categories = new KategorijaLista(list);

@@ -39,6 +39,7 @@ public class PocjetnikActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         int position = 0;
         handler = new PocjetnikQueryHandler(getContentResolver());
+
         ActivityPocjetnikBinding binding =
                 DataBindingUtil.setContentView(this, R.layout.activity_pocjetnik);
         Intent intent = getIntent();
@@ -62,6 +63,7 @@ public class PocjetnikActivity extends AppCompatActivity {
             }
             spinner.setSelection(position);
         }
+
     }
 
     @Override
@@ -82,7 +84,7 @@ public class PocjetnikActivity extends AppCompatActivity {
                     .setPositiveButton(android.R.string.yes, new DialogInterface.
                             OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                            //delete
+
                             Uri uri =  Uri.withAppendedPath(
                                     PocjetnikContract.PocjetnikEntry.CONTENT_URI,
                                     String.valueOf(pocjetnik.id.get()));
@@ -100,13 +102,15 @@ public class PocjetnikActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+
     @Override
     public void onPause() {
-        super.onPause();  // Always call the superclass method first
+        super.onPause();
         String [] args = new String[1];
         PocjetnikQueryHandler handler =  new PocjetnikQueryHandler(getContentResolver());
 
-        Kategorija cat = (Kategorija) spinner.getSelectedItem();
+        Kategorija cat = (Kategorija)spinner.getSelectedItem();
         int catId = cat.catId.get();
         ContentValues values = new ContentValues();
         values.put(PocjetnikContract.PocjetnikEntry.COLUMN_TEXT, pocjetnik.text.get());

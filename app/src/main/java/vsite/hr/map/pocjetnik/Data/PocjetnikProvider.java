@@ -19,6 +19,7 @@ import vsite.hr.map.pocjetnik.Data.PocjetnikContract.KategorijaEntry;
 import vsite.hr.map.pocjetnik.Data.PocjetnikContract.PocjetnikEntry;
 
 public class PocjetnikProvider extends ContentProvider {
+
     private static final int TODOS = 1;
     private static final int TODOS_ID = 2;
     private static final int CATEGORIES = 3;
@@ -33,13 +34,13 @@ public class PocjetnikProvider extends ContentProvider {
         uriMatcher.addURI(CONTENT_AUTHORITY, PATH_CATEGORIES, CATEGORIES);
         uriMatcher.addURI(CONTENT_AUTHORITY, PATH_CATEGORIES + "/#", CATEGORIES_ID);
     }
+
     private DatabaseHelper helper;
     @Override
     public boolean onCreate() {
         helper = new DatabaseHelper(getContext());
         return true;
     }
-
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String orderBy) {
@@ -60,7 +61,8 @@ public class PocjetnikProvider extends ContentProvider {
             case TODOS:
                 builder = new SQLiteQueryBuilder();
                 builder.setTables(inTables);
-                cursor = builder.query(db, projection, null, null, null, null, orderBy);
+                cursor = builder.query(db, projection, selection,
+                        selectionArgs, null, null, orderBy);
                 break;
             case TODOS_ID:
                 builder = new SQLiteQueryBuilder();
@@ -87,28 +89,27 @@ public class PocjetnikProvider extends ContentProvider {
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
-
     @Nullable
     @Override
     public String getType(Uri uri) {
         return null;
     }
-
     @Nullable
     @Override
-    public Uri insert(Uri uri, ContentValues values) {
+    public Uri insert(Uri uri, ContentValues contentValues) {
         int match = uriMatcher.match(uri);
         switch (match) {
             case TODOS:
-                return insertRecord(uri, values, PocjetnikEntry.TABLE_NAME);
+                return insertRecord(uri, contentValues, PocjetnikEntry.TABLE_NAME);
             case CATEGORIES:
-                return insertRecord(uri, values, KategorijaEntry.TABLE_NAME);
+                return insertRecord(uri, contentValues, KategorijaEntry.TABLE_NAME);
             default:
                 throw new IllegalArgumentException("Insert unknown URI: " + uri);
         }
     }
 
     private Uri insertRecord(Uri uri, ContentValues values, String table) {
+
         SQLiteDatabase db = helper.getWritableDatabase();
         long id = db.insert(table, null, values);
         if (id == -1) {
@@ -130,8 +131,13 @@ public class PocjetnikProvider extends ContentProvider {
             case CATEGORIES:
                 return deleteRecord(uri, null, null, KategorijaEntry.TABLE_NAME);
             case CATEGORIES_ID:
-                return deleteRecord(uri, selection, selectionArgs,
+                long id = ContentUris.parseId(uri);
+                selection = KategorijaEntry._ID + "=?";
+                String[] sel = new String[1];
+                sel[0] = String.valueOf(id);
+                return deleteRecord(uri, selection, sel,
                         KategorijaEntry.TABLE_NAME);
+
 
             default:
                 throw new IllegalArgumentException("Insert unknown URI: " + uri);
@@ -139,6 +145,7 @@ public class PocjetnikProvider extends ContentProvider {
     }
 
     private int deleteRecord(Uri uri, String selection, String[] selectionArgs, String tableName) {
+
         SQLiteDatabase db = helper.getWritableDatabase();
         int id = db.delete(tableName, selection, selectionArgs);
         if (id == -1) {
@@ -164,6 +171,7 @@ public class PocjetnikProvider extends ContentProvider {
     }
 
     private int updateRecord(Uri uri, ContentValues values, String selection, String[] selectionArgs, String tableName) {
+
         SQLiteDatabase db = helper.getWritableDatabase();
         int id = db.update(tableName, values, selection, selectionArgs);
         if (id == 0) {

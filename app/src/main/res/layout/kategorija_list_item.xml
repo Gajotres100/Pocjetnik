@@ -29,5 +29,6 @@
             android:text="@{category.description}"
             android:tag="@{category.catId}"
             android:textSize="18sp" />
+
     </RelativeLayout>
 </layout>
